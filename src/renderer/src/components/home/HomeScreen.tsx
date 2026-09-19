@@ -1,9 +1,14 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { SuitGlyph } from '@renderer/components/table/SuitGlyph'
 import { useGameStore } from '@renderer/store/gameStore'
+import { SettingsPanel } from './SettingsPanel'
+import { StatsPanel } from './StatsPanel'
 
 export function HomeScreen(): React.JSX.Element {
   const startNewGame = useGameStore((s) => s.startNewGame)
+  const enterTutorial = useGameStore((s) => s.enterTutorial)
+  const [modal, setModal] = useState<'settings' | 'stats' | null>(null)
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-10 bg-[radial-gradient(ellipse_at_center,var(--color-wood-800)_0%,var(--color-wood-950)_75%)]">
@@ -34,10 +39,13 @@ export function HomeScreen(): React.JSX.Element {
         className="flex flex-col gap-3"
       >
         <MenuButton label="New Game" primary onClick={startNewGame} />
-        <MenuButton label="Tutorial" disabled />
-        <MenuButton label="Settings" disabled />
-        <MenuButton label="Stats" disabled />
+        <MenuButton label="Tutorial" onClick={enterTutorial} />
+        <MenuButton label="Settings" onClick={() => setModal('settings')} />
+        <MenuButton label="Stats" onClick={() => setModal('stats')} />
       </motion.div>
+
+      {modal === 'settings' && <SettingsPanel onClose={() => setModal(null)} />}
+      {modal === 'stats' && <StatsPanel onClose={() => setModal(null)} />}
     </div>
   )
 }

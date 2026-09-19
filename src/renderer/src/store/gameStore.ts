@@ -21,6 +21,8 @@ import {
 } from '@renderer/engine/play'
 import { scoreHand } from '@renderer/engine/scoring'
 import { createHandSetup } from '@renderer/engine/gameState'
+import { useSettingsStore } from '@renderer/store/settingsStore'
+import { useStatsStore } from '@renderer/store/statsStore'
 import {
   AuctionResult,
   AuctionState,
@@ -51,7 +53,7 @@ interface CumulativeScore {
 }
 
 interface GameState {
-  view: 'home' | 'table'
+  view: 'home' | 'table' | 'tutorial'
   boardNumber: number
   handId: number
   setup: HandSetup | null
@@ -67,6 +69,8 @@ interface GameState {
   startNextHand: () => void
   humanBid: (call: Call) => void
   humanPlay: (card: Card) => void
+  enterTutorial: () => void
+  returnHome: () => void
 }
 
 function dealNewHand(boardNumber: number): { setup: HandSetup; auction: AuctionState } {
@@ -85,6 +89,7 @@ export const useGameStore = create<GameState>((set, get) => {
         const contract = resolveAuction(auction)
         if (!contract) {
           set({ phase: 'passed-out', contract: null })
+          useStatsStore.getState().recordHand(null, null)
           return
         }
         const playState = initPlayState(contract, state.setup!.deal)
@@ -129,7 +134,7 @@ export const useGameStore = create<GameState>((set, get) => {
         // never be used to play a card once state has moved on.
         const currentSeat = s.playState.nextToPlay
         if (controllerOf(s.contract as Contract, currentSeat) === HUMAN_SEAT) return
-        const card = chooseCard(s.playState, currentSeat)
+        const card = chooseCard(s.playState, currentSeat, useSettingsStore.getState().difficulty)
         applyPlay(expectedHandId, currentSeat, card)
       }, AI_PLAY_DELAY_MS)
     }
@@ -143,6 +148,7 @@ export const useGameStore = create<GameState>((set, get) => {
     const score = scoreHand(contract, declarerPartnershipTricks, get().setup!.vulnerability)
     set({ phase: 'scoring', score })
     applyCumulativeScore(contract, score.score)
+    useStatsStore.getState().recordHand(contract, score)
   }
 
   function applyCumulativeScore(contract: Contract, signedScore: number): void {
@@ -252,7 +258,10 @@ export const useGameStore = create<GameState>((set, get) => {
       if (controllerOf(s.contract as Contract, seat) !== HUMAN_SEAT) return
       if (!isPlayLegal(s.playState, seat, card)) return
       applyPlay(s.handId, seat, card)
-    }
+    },
+
+    enterTutorial: () => set({ view: 'tutorial' }),
+    returnHome: () => set({ view: 'home' })
   }
 })
 
