@@ -1,172 +1,81 @@
 @import 'tailwindcss';
+@import '@fontsource/cinzel/400.css';
+@import '@fontsource/cinzel/500.css';
+@import '@fontsource/cinzel/600.css';
+@import '@fontsource/cinzel/700.css';
+@import '@fontsource/eb-garamond/400.css';
+@import '@fontsource/eb-garamond/500.css';
+@import '@fontsource/eb-garamond/600.css';
+@import '@fontsource/eb-garamond/700.css';
+@import '@fontsource/eb-garamond/400-italic.css';
 @import './base.css';
 
+/*
+ * Warm rustic-fantasy palette: aged wood, worn leather, candlelight,
+ * parchment, and brass/gold accents. No literal franchise references --
+ * an original warm-fantasy identity.
+ */
+@theme {
+  --color-wood-950: #170f08;
+  --color-wood-900: #241609;
+  --color-wood-850: #2f1c0e;
+  --color-wood-800: #3c2412;
+  --color-wood-700: #4d2f18;
+  --color-wood-600: #663c1e;
+  --color-wood-500: #7f4d26;
+
+  --color-leather-800: #4a2c1c;
+  --color-leather-600: #6b3f26;
+
+  --color-parchment-950: #e9d9b8;
+  --color-parchment: #f2e4c4;
+  --color-parchment-light: #faf1dc;
+
+  --color-amber: #e2942f;
+  --color-amber-glow: #ffb454;
+  --color-amber-dim: #a86a26;
+
+  --color-gold: #c9a44c;
+  --color-gold-bright: #ecd28a;
+  --color-gold-dim: #8a6e34;
+
+  --color-ink: #241a12;
+  --color-crimson: #7c2a1d;
+  --color-crimson-bright: #a83d27;
+
+  --color-cream: #f3e6cb;
+  --color-cream-muted: #cbb691;
+  --color-cream-dim: #a08d6c;
+
+  --color-felt: #2a1d10;
+
+  --font-display: 'Cinzel', 'Iowan Old Style', Georgia, serif;
+  --font-body: 'EB Garamond', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+}
+
 body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: radial-gradient(ellipse at center, var(--color-wood-900) 0%, var(--color-wood-950) 70%);
   overflow: hidden;
-  background-image: url('./wavy-lines.svg');
-  background-size: cover;
   user-select: none;
 }
 
-code {
-  font-weight: 600;
-  padding: 3px 5px;
-  border-radius: 2px;
-  background-color: var(--color-background-mute);
-  font-family:
-    ui-monospace,
-    SFMono-Regular,
-    SF Mono,
-    Menlo,
-    Consolas,
-    Liberation Mono,
-    monospace;
-  font-size: 85%;
-}
-
 #root {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  margin-bottom: 80px;
+  height: 100vh;
+  width: 100vw;
 }
 
-.logo {
-  margin-bottom: 20px;
-  -webkit-user-drag: none;
-  height: 128px;
-  width: 128px;
-  will-change: filter;
-  transition: filter 300ms;
+::selection {
+  background: var(--color-amber);
+  color: var(--color-ink);
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 1.2em #6988e6aa);
+::-webkit-scrollbar {
+  width: 10px;
 }
-
-.creator {
-  font-size: 14px;
-  line-height: 16px;
-  color: var(--ev-c-text-2);
-  font-weight: 600;
-  margin-bottom: 10px;
+::-webkit-scrollbar-track {
+  background: var(--color-wood-900);
 }
-
-.text {
-  font-size: 28px;
-  color: var(--ev-c-text-1);
-  font-weight: 700;
-  line-height: 32px;
-  text-align: center;
-  margin: 0 10px;
-  padding: 16px 0;
-}
-
-.tip {
-  font-size: 16px;
-  line-height: 24px;
-  color: var(--ev-c-text-2);
-  font-weight: 600;
-}
-
-.react {
-  background: -webkit-linear-gradient(315deg, #087ea4 55%, #7c93ee);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 700;
-}
-
-.ts {
-  background: -webkit-linear-gradient(315deg, #3178c6 45%, #f0dc4e);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 700;
-}
-
-.actions {
-  display: flex;
-  padding-top: 32px;
-  margin: -6px;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-}
-
-.action {
-  flex-shrink: 0;
-  padding: 6px;
-}
-
-.action a {
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  border: 1px solid transparent;
-  text-align: center;
-  font-weight: 600;
-  white-space: nowrap;
-  border-radius: 20px;
-  padding: 0 20px;
-  line-height: 38px;
-  font-size: 14px;
-  border-color: var(--ev-button-alt-border);
-  color: var(--ev-button-alt-text);
-  background-color: var(--ev-button-alt-bg);
-}
-
-.action a:hover {
-  border-color: var(--ev-button-alt-hover-border);
-  color: var(--ev-button-alt-hover-text);
-  background-color: var(--ev-button-alt-hover-bg);
-}
-
-.versions {
-  position: absolute;
-  bottom: 30px;
-  margin: 0 auto;
-  padding: 15px 0;
-  font-family: 'Menlo', 'Lucida Console', monospace;
-  display: inline-flex;
-  overflow: hidden;
-  align-items: center;
-  border-radius: 22px;
-  background-color: #202127;
-  backdrop-filter: blur(24px);
-}
-
-.versions li {
-  display: block;
-  float: left;
-  border-right: 1px solid var(--ev-c-gray-1);
-  padding: 0 20px;
-  font-size: 14px;
-  line-height: 14px;
-  opacity: 0.8;
-  &:last-child {
-    border: none;
-  }
-}
-
-@media (max-width: 720px) {
-  .text {
-    font-size: 20px;
-  }
-}
-
-@media (max-width: 620px) {
-  .versions {
-    display: none;
-  }
-}
-
-@media (max-width: 350px) {
-  .tip,
-  .actions {
-    display: none;
-  }
+::-webkit-scrollbar-thumb {
+  background: var(--color-wood-600);
+  border-radius: 6px;
 }
