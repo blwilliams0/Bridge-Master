@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Bridge Master
 
 A single-player contract bridge desktop app built with Electron, React, and TypeScript. Play South with three AI players, or learn through 11 interactive lessons.
@@ -44,3 +45,7 @@ npm run build:linux
 ```
 
 Use `npm run build:unpack` for an unpacked application. Packaging may download platform tooling; signing and distribution credentials are not configured in this repository.
+=======
+# Bridge-Master
+Independent Bridge playing card game with tutorial. Built for single player learning with AI partner and players. 
+>>>>>>> 1dc56b20a96d3ae9f36b05fafc676e9bead435ea
