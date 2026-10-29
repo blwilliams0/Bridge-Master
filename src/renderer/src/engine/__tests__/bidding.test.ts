@@ -30,7 +30,7 @@ describe('bid legality', () => {
     expect(isCallLegal(auction, bid(2, 'C'))).toBe(true)
   })
 
-  it('cannot double partner\'s bid', () => {
+  it("cannot double partner's bid", () => {
     let auction = createAuction('N')
     auction = makeCall(auction, bid(1, 'H')) // N
     auction = makeCall(auction, PASS) // E

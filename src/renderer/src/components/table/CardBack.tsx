@@ -17,8 +17,28 @@ export function CardBack({ className, style }: CardBackProps): React.JSX.Element
       }}
     >
       <svg viewBox="0 0 140 196" className="absolute inset-0 h-full w-full" aria-hidden>
-        <rect x="4" y="4" width="132" height="188" rx="8" fill="none" stroke="var(--color-gold)" strokeWidth="1.2" opacity={0.8} />
-        <rect x="9" y="9" width="122" height="178" rx="5" fill="none" stroke="var(--color-gold)" strokeWidth="0.6" opacity={0.5} />
+        <rect
+          x="4"
+          y="4"
+          width="132"
+          height="188"
+          rx="8"
+          fill="none"
+          stroke="var(--color-gold)"
+          strokeWidth="1.2"
+          opacity={0.8}
+        />
+        <rect
+          x="9"
+          y="9"
+          width="122"
+          height="178"
+          rx="5"
+          fill="none"
+          stroke="var(--color-gold)"
+          strokeWidth="0.6"
+          opacity={0.5}
+        />
         <defs>
           <pattern id="quatrefoil" width="20" height="20" patternUnits="userSpaceOnUse">
             <circle cx="10" cy="10" r="2.1" fill="var(--color-gold)" opacity={0.35} />
@@ -33,7 +53,13 @@ export function CardBack({ className, style }: CardBackProps): React.JSX.Element
         </defs>
         <rect x="12" y="12" width="116" height="172" rx="4" fill="url(#quatrefoil)" />
         <g transform="translate(70 98)">
-          <circle r="30" fill="var(--color-wood-800)" stroke="var(--color-gold)" strokeWidth="1.4" opacity={0.9} />
+          <circle
+            r="30"
+            fill="var(--color-wood-800)"
+            stroke="var(--color-gold)"
+            strokeWidth="1.4"
+            opacity={0.9}
+          />
           <circle r="24" fill="none" stroke="var(--color-gold)" strokeWidth="0.6" opacity={0.6} />
           <text
             x="0"

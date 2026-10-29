@@ -1,4 +1,12 @@
-import { Contract, Doubling, HandScore, isVulnerable, partnershipOf, Strain, Vulnerability } from './types'
+import {
+  Contract,
+  Doubling,
+  HandScore,
+  isVulnerable,
+  partnershipOf,
+  Strain,
+  Vulnerability
+} from './types'
 
 /** Per-trick trick score for a made contract (NT's first trick is worth more; used for overtricks too, except NT overtricks are 30 not 40). */
 function perTrickValue(strain: Strain): number {
@@ -81,7 +89,8 @@ export function scoreHand(
   if (madeContract) {
     const overtricks = tricksTaken - tricksNeeded
     const contractTrickScore =
-      contractTrickScoreBase(contract.level, contract.strain) * doublingMultiplier(contract.doubling)
+      contractTrickScoreBase(contract.level, contract.strain) *
+      doublingMultiplier(contract.doubling)
     const gameOrPartscoreBonus = contractTrickScore >= 100 ? (vulnerable ? 500 : 300) : 50
     const overtrickScore =
       overtricks * overtrickValue(contract.strain, contract.doubling, vulnerable)

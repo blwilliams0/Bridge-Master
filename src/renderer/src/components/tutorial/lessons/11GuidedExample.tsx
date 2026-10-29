@@ -5,7 +5,7 @@ import { chooseCard } from '@renderer/engine/playAI'
 import { seededRng } from '@renderer/engine/cards'
 import { dummySeat, openingLeader } from '@renderer/engine/play'
 import { Seat, SEATS } from '@renderer/engine/types'
-import { strainColor, strainSymbol } from '@renderer/components/bidding/BiddingBox'
+import { strainColor, strainSymbol } from '@renderer/lib/cardDisplay'
 import { MiniHand } from '../MiniHand'
 import { useGameStore } from '@renderer/store/gameStore'
 
@@ -26,13 +26,19 @@ export default function GuidedExample(): React.JSX.Element {
 
   return (
     <div className="flex flex-col gap-6 font-body text-[var(--color-cream)]">
-      <p>Let's walk through one complete deal, from the cards in front of each player to the final score.</p>
+      <p>
+        Let&apos;s walk through one complete deal, from the cards in front of each player to the
+        final score.
+      </p>
 
       <section>
         <h3 className="font-display text-base text-[var(--color-gold-bright)]">The Deal</h3>
         <div className="mt-2 grid grid-cols-2 gap-3">
           {SEATS.map((seat) => (
-            <div key={seat} className="rounded-lg border border-[var(--color-gold-dim)] bg-[var(--color-wood-900)] p-2">
+            <div
+              key={seat}
+              className="rounded-lg border border-[var(--color-gold-dim)] bg-[var(--color-wood-900)] p-2"
+            >
               <div className="mb-1 font-display text-xs uppercase tracking-wide text-[var(--color-cream-muted)]">
                 {SEAT_LABEL[seat]}
               </div>
@@ -46,7 +52,10 @@ export default function GuidedExample(): React.JSX.Element {
         <h3 className="font-display text-base text-[var(--color-gold-bright)]">The Auction</h3>
         <div className="mt-2 flex flex-wrap gap-2">
           {auction.calls.map((call, i) => (
-            <div key={i} className="rounded-md border border-[var(--color-gold-dim)] bg-[var(--color-wood-900)] px-2.5 py-1 text-sm">
+            <div
+              key={i}
+              className="rounded-md border border-[var(--color-gold-dim)] bg-[var(--color-wood-900)] px-2.5 py-1 text-sm"
+            >
               <span className="text-[var(--color-cream-muted)]">{SEAT_LABEL[call.seat]}:</span>{' '}
               {call.call.type === 'bid' ? (
                 <span style={{ color: strainColor(call.call.strain) }}>
@@ -72,8 +81,8 @@ export default function GuidedExample(): React.JSX.Element {
                 {contract.level}
                 {strainSymbol(contract.strain)}
               </span>
-              . {SEAT_LABEL[dummySeat(contract)]}'s hand becomes the dummy, laid face-up after{' '}
-              {SEAT_LABEL[openingLeader(contract)]}'s opening lead.
+              . {SEAT_LABEL[dummySeat(contract)]}&apos;s hand becomes the dummy, laid face-up after{' '}
+              {SEAT_LABEL[openingLeader(contract)]}&apos;s opening lead.
             </p>
           </section>
 
@@ -91,20 +100,24 @@ export default function GuidedExample(): React.JSX.Element {
               {score.madeContract ? 'Contract made' : 'Contract defeated'} &mdash;{' '}
               <span
                 className={
-                  score.score >= 0 ? 'text-[var(--color-amber-glow)]' : 'text-[var(--color-crimson-bright)]'
+                  score.score >= 0
+                    ? 'text-[var(--color-amber-glow)]'
+                    : 'text-[var(--color-crimson-bright)]'
                 }
               >
                 {score.score >= 0 ? '+' : ''}
                 {score.score}
               </span>{' '}
-              for {contract.declarer === 'N' || contract.declarer === 'S' ? 'North/South' : 'East/West'}.
+              for{' '}
+              {contract.declarer === 'N' || contract.declarer === 'S' ? 'North/South' : 'East/West'}
+              .
             </p>
           </section>
         </>
       ) : (
         <p className="italic text-[var(--color-cream-muted)]">
-          Nobody had enough to open this time, so the hand was thrown in with no play -- that's a
-          normal, if uneventful, outcome in bridge.
+          Nobody had enough to open this time, so the hand was thrown in with no play -- that&apos;s
+          a normal, if uneventful, outcome in bridge.
         </p>
       )}
 

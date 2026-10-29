@@ -23,9 +23,17 @@ const SIZES = {
   vertical: { width: 52, overlap: 50 }
 }
 
-export function Hand({ hand, faceUp, playableCards, onPlay, orientation, label }: HandProps): React.JSX.Element {
+export function Hand({
+  hand,
+  faceUp,
+  playableCards,
+  onPlay,
+  orientation,
+  label
+}: HandProps): React.JSX.Element {
   const sorted = sortHand(hand)
-  const isPlayable = (c: CardModel): boolean => playableCards.some((p) => p.suit === c.suit && p.rank === c.rank)
+  const isPlayable = (c: CardModel): boolean =>
+    playableCards.some((p) => p.suit === c.suit && p.rank === c.rank)
   const { width, overlap } = SIZES[orientation]
   const isHorizontal = orientation === 'horizontal'
 

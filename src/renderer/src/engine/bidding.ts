@@ -86,7 +86,7 @@ export function isCallLegal(auction: AuctionState, call: Call): boolean {
   if (call.type === 'bid') {
     const top = highestBid(auction)
     if (!top) return true
-    return outranks(call, (top.call as BidCall))
+    return outranks(call, top.call as BidCall)
   }
 
   const top = highestBid(auction)

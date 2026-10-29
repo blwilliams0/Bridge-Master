@@ -8,6 +8,8 @@ import { StatsPanel } from './StatsPanel'
 export function HomeScreen(): React.JSX.Element {
   const startNewGame = useGameStore((s) => s.startNewGame)
   const enterTutorial = useGameStore((s) => s.enterTutorial)
+  const resumeGame = useGameStore((s) => s.resumeGame)
+  const hasGame = useGameStore((s) => s.setup !== null)
   const [modal, setModal] = useState<'settings' | 'stats' | null>(null)
 
   return (
@@ -38,7 +40,8 @@ export function HomeScreen(): React.JSX.Element {
         transition={{ duration: 0.6, delay: 0.2 }}
         className="flex flex-col gap-3"
       >
-        <MenuButton label="New Game" primary onClick={startNewGame} />
+        {hasGame && <MenuButton label="Resume Game" primary onClick={resumeGame} />}
+        <MenuButton label="New Game" primary={!hasGame} onClick={startNewGame} />
         <MenuButton label="Tutorial" onClick={enterTutorial} />
         <MenuButton label="Settings" onClick={() => setModal('settings')} />
         <MenuButton label="Stats" onClick={() => setModal('stats')} />

@@ -19,10 +19,10 @@ export default function PlayingTheHand(): React.JSX.Element {
   return (
     <div className="flex flex-col gap-6 font-body text-[var(--color-cream)]">
       <p>
-        Once the auction ends, declarer's partner lays their hand face-up on the table as the{' '}
-        <strong>dummy</strong> -- declarer plays both their own cards and dummy's, while the
-        dummy's own player takes no active part for the rest of the hand. The defenders (the other
-        partnership) play as normal.
+        Once the auction ends, declarer&apos;s partner lays their hand face-up on the table as the{' '}
+        <strong>dummy</strong> -- declarer plays both their own cards and dummy&apos;s, while the
+        dummy&apos;s own player takes no active part for the rest of the hand. The defenders (the
+        other partnership) play as normal.
       </p>
       <p>
         Each trick, everyone must <strong>follow suit</strong> if they can -- play a card of the
@@ -53,9 +53,10 @@ export default function PlayingTheHand(): React.JSX.Element {
           ))}
         </div>
         <p className="mt-3 text-sm text-[var(--color-cream-muted)]">
-          Spades are trump. North leads a heart; East and West both follow suit, but South holds
-          no hearts at all and plays a spade instead -- ruffing. Because trumps beat every other
-          suit, South's low 4♠ wins the trick even though West's K♥ was the highest heart played.
+          Spades are trump. North leads a heart; East and West both follow suit, but South holds no
+          hearts at all and plays a spade instead -- ruffing. Because trumps beat every other suit,
+          South&apos;s low 4♠ wins the trick even though West&apos;s K♥ was the highest heart
+          played.
         </p>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { Contract } from '@renderer/engine/types'
-import { strainColor, strainSymbol } from '@renderer/components/bidding/BiddingBox'
+import { strainColor, strainSymbol } from '@renderer/lib/cardDisplay'
 
 const SEAT_LABEL: Record<string, string> = { N: 'North', E: 'East', S: 'South', W: 'West' }
 
@@ -9,7 +9,8 @@ interface ContractBannerProps {
 }
 
 export function ContractBanner({ contract, tricksWon }: ContractBannerProps): React.JSX.Element {
-  const doubleLabel = contract.doubling === 'doubled' ? ' X' : contract.doubling === 'redoubled' ? ' XX' : ''
+  const doubleLabel =
+    contract.doubling === 'doubled' ? ' X' : contract.doubling === 'redoubled' ? ' XX' : ''
   return (
     <div className="flex items-center gap-3 rounded-full border border-[var(--color-gold-dim)] bg-[var(--color-wood-850)]/90 px-5 py-2 font-display text-sm text-[var(--color-cream)] shadow-lg">
       <span>

@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { createAuction, isAuctionOver, legalCalls, makeCall, resolveAuction, whoseTurn } from '../bidding'
+import {
+  createAuction,
+  isAuctionOver,
+  legalCalls,
+  makeCall,
+  resolveAuction,
+  whoseTurn
+} from '../bidding'
 import { seededRng } from '../cards'
 import { createHandSetup } from '../gameState'
 import { initPlayState, isPlayComplete, legalPlays, playCard } from '../play'

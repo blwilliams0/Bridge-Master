@@ -25,10 +25,10 @@ export default function CardRanking(): React.JSX.Element {
 
       <p>
         There are four suits. In a <strong>notrump</strong> contract, no suit is special -- the
-        highest card of the suit led always wins the trick. In a <strong>suit contract</strong>,
-        one suit is named <strong>trump</strong>: any trump card beats every card of every other
-        suit, no matter how low -- so even a small trump can win a trick your hand couldn't
-        otherwise take.
+        highest card of the suit led always wins the trick. In a <strong>suit contract</strong>, one
+        suit is named <strong>trump</strong>: any trump card beats every card of every other suit,
+        no matter how low -- so even a small trump can win a trick your hand couldn&apos;t otherwise
+        take.
       </p>
 
       <div className="flex justify-center gap-8">

@@ -1,7 +1,7 @@
 import { isCallLegal } from '@renderer/engine/bidding'
-import { SUIT_SYMBOL } from '@renderer/engine/cards'
 import { AuctionState, Call, Strain } from '@renderer/engine/types'
-import { SuitGlyph, suitColor } from '@renderer/components/table/SuitGlyph'
+import { SuitGlyph } from '@renderer/components/table/SuitGlyph'
+import { strainColor } from '@renderer/lib/cardDisplay'
 
 const STRAINS: Strain[] = ['C', 'D', 'H', 'S', 'NT']
 const LEVELS = [1, 2, 3, 4, 5, 6, 7] as const
@@ -27,6 +27,7 @@ export function BiddingBox({ auction, disabled, onCall }: BiddingBoxProps): Reac
                 key={`${level}${strain}`}
                 type="button"
                 disabled={!ok}
+                aria-label={`${level} ${strain === 'NT' ? 'notrump' : { C: 'clubs', D: 'diamonds', H: 'hearts', S: 'spades' }[strain]}`}
                 onClick={() => onCall(call)}
                 className={`flex h-9 w-12 items-center justify-center gap-0.5 rounded-md border font-display text-xs transition-colors ${
                   ok
@@ -38,7 +39,7 @@ export function BiddingBox({ auction, disabled, onCall }: BiddingBoxProps): Reac
                 {strain === 'NT' ? (
                   <span className="text-xs">NT</span>
                 ) : (
-                  <SuitGlyph suit={strain} size={13} />
+                  <SuitGlyph suit={strain} size={13} color={strainColor(strain)} />
                 )}
               </button>
             )
@@ -46,8 +47,18 @@ export function BiddingBox({ auction, disabled, onCall }: BiddingBoxProps): Reac
         )}
       </div>
       <div className="flex gap-1.5">
-        <CallButton label="Pass" call={{ type: 'pass' }} legal={legal({ type: 'pass' })} onCall={onCall} />
-        <CallButton label="Dbl" call={{ type: 'double' }} legal={legal({ type: 'double' })} onCall={onCall} />
+        <CallButton
+          label="Pass"
+          call={{ type: 'pass' }}
+          legal={legal({ type: 'pass' })}
+          onCall={onCall}
+        />
+        <CallButton
+          label="Dbl"
+          call={{ type: 'double' }}
+          legal={legal({ type: 'double' })}
+          onCall={onCall}
+        />
         <CallButton
           label="Rdbl"
           call={{ type: 'redouble' }}
@@ -84,12 +95,4 @@ function CallButton({
       {label}
     </button>
   )
-}
-
-export function strainSymbol(strain: Strain): string {
-  return strain === 'NT' ? 'NT' : SUIT_SYMBOL[strain]
-}
-
-export function strainColor(strain: Strain): string {
-  return strain === 'NT' ? 'var(--color-gold-bright)' : suitColor(strain)
 }

@@ -37,9 +37,7 @@ export function dealHands(rng: RNG = Math.random): Deal {
 
 export function sortHand(hand: Hand): Hand {
   const suitOrder: Record<Suit, number> = { S: 0, H: 1, D: 2, C: 3 }
-  return hand
-    .slice()
-    .sort((a, b) => suitOrder[a.suit] - suitOrder[b.suit] || b.rank - a.rank)
+  return hand.slice().sort((a, b) => suitOrder[a.suit] - suitOrder[b.suit] || b.rank - a.rank)
 }
 
 export function cardsEqual(a: Card, b: Card): boolean {

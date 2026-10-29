@@ -1,7 +1,7 @@
 import { createAuction, makeCall } from '@renderer/engine/bidding'
 import { chooseBid } from '@renderer/engine/biddingAI'
 import { AuctionState, BidCall, Card as CardModel, Rank, Suit } from '@renderer/engine/types'
-import { strainColor, strainSymbol } from '@renderer/components/bidding/BiddingBox'
+import { strainColor, strainSymbol } from '@renderer/lib/cardDisplay'
 import { MiniHand } from '../MiniHand'
 
 function c(suit: Suit, rank: Rank): CardModel {
@@ -17,17 +17,35 @@ function auctionAfterOpening(openingCall: BidCall): AuctionState {
 }
 
 const MAJOR_RAISE_RESPONDER: CardModel[] = [
-  c('H', 13), c('H', 9), c('H', 6), c('H', 4),
-  c('S', 8), c('S', 5),
-  c('D', 12), c('D', 7), c('D', 3),
-  c('C', 10), c('C', 9), c('C', 6), c('C', 2)
+  c('H', 13),
+  c('H', 9),
+  c('H', 6),
+  c('H', 4),
+  c('S', 8),
+  c('S', 5),
+  c('D', 12),
+  c('D', 7),
+  c('D', 3),
+  c('C', 10),
+  c('C', 9),
+  c('C', 6),
+  c('C', 2)
 ]
 
 const STAYMAN_RESPONDER: CardModel[] = [
-  c('S', 13), c('S', 9), c('S', 7), c('S', 4),
-  c('H', 12), c('H', 11), c('H', 6), c('H', 4),
-  c('D', 14), c('D', 8), c('D', 3),
-  c('C', 6), c('C', 5)
+  c('S', 13),
+  c('S', 9),
+  c('S', 7),
+  c('S', 4),
+  c('H', 12),
+  c('H', 11),
+  c('H', 6),
+  c('H', 4),
+  c('D', 14),
+  c('D', 8),
+  c('D', 3),
+  c('C', 6),
+  c('C', 5)
 ]
 
 export default function ResponsesStayman(): React.JSX.Element {
@@ -41,7 +59,7 @@ export default function ResponsesStayman(): React.JSX.Element {
     <div className="flex flex-col gap-6 font-body text-[var(--color-cream)]">
       <p>
         Once partner opens, responder describes their own hand in reply. A few common responses:
-        raise partner's major with three-plus card support, bid a new suit to keep the auction
+        raise partner&apos;s major with three-plus card support, bid a new suit to keep the auction
         alive, or respond 1NT with a weak hand and no fit.
       </p>
 
@@ -55,9 +73,9 @@ export default function ResponsesStayman(): React.JSX.Element {
 
       <p>
         <strong className="text-[var(--color-gold-bright)]">Stayman</strong> is a conventional 2♣
-        response to a 1NT opening -- it doesn't show clubs at all. It asks partner: "do you have a
-        4-card major?" so the partnership can find a major-suit fit instead of settling for
-        notrump.
+        response to a 1NT opening -- it doesn&apos;t show clubs at all. It asks partner: &quot;do
+        you have a 4-card major?&quot; so the partnership can find a major-suit fit instead of
+        settling for notrump.
       </p>
 
       <ResponseExample
@@ -90,7 +108,10 @@ function ResponseExample({
         <h3 className="font-display text-base text-[var(--color-gold-bright)]">{title}</h3>
         <div className="flex items-center gap-2 font-display text-sm text-[var(--color-cream-muted)]">
           <span>Partner opens {openerBid}, responds with</span>
-          <span className="flex items-center gap-1 text-lg" style={{ color: strainColor(call.strain) }}>
+          <span
+            className="flex items-center gap-1 text-lg"
+            style={{ color: strainColor(call.strain) }}
+          >
             <span>{call.level}</span>
             <span>{strainSymbol(call.strain)}</span>
           </span>

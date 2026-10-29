@@ -51,7 +51,8 @@ export const useStatsStore = create<StatsState>((set, get) => {
           handsPlayed: s.handsPlayed + 1,
           declarerHands: s.declarerHands + (declarerSide === 'NS' ? 1 : 0),
           contractsMade: s.contractsMade + (declarerSide === 'NS' && score.madeContract ? 1 : 0),
-          contractsDefeated: s.contractsDefeated + (declarerSide === 'NS' && !score.madeContract ? 1 : 0),
+          contractsDefeated:
+            s.contractsDefeated + (declarerSide === 'NS' && !score.madeContract ? 1 : 0),
           totalNsScore: s.totalNsScore + nsDelta
         }))
       }

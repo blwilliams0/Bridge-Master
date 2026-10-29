@@ -16,7 +16,11 @@ export type PlayDifficulty = 'beginner' | 'club-player'
 // applies, so this function can never throw or return an illegal play.
 // ---------------------------------------------------------------------------
 
-export function chooseCard(state: PlayState, seat: Seat, difficulty: PlayDifficulty = 'club-player'): Card {
+export function chooseCard(
+  state: PlayState,
+  seat: Seat,
+  difficulty: PlayDifficulty = 'club-player'
+): Card {
   const options = legalPlays(state, seat)
   if (options.length === 0) {
     throw new Error(`No legal plays available for ${seat}`)
@@ -143,7 +147,12 @@ function discardOrTrump(state: PlayState, seat: Seat, options: Card[], trick: Pl
   return candidates[0]
 }
 
-function chooseMiddleHandPlay(state: PlayState, seat: Seat, options: Card[], trick: PlayedCard[]): Card {
+function chooseMiddleHandPlay(
+  state: PlayState,
+  seat: Seat,
+  options: Card[],
+  trick: PlayedCard[]
+): Card {
   const ledSuit = trick[0].card.suit
   const leaderSeat = trick[0].seat
   const canFollow = options.some((c) => c.suit === ledSuit)
@@ -177,7 +186,12 @@ function chooseMiddleHandPlay(state: PlayState, seat: Seat, options: Card[], tri
   return discardOrTrump(state, seat, options, trick)
 }
 
-function chooseLastToPlay(state: PlayState, seat: Seat, options: Card[], trick: PlayedCard[]): Card {
+function chooseLastToPlay(
+  state: PlayState,
+  seat: Seat,
+  options: Card[],
+  trick: PlayedCard[]
+): Card {
   const currentWinner = trickWinner(trick, state.trumpSuit)
   const ledSuit = trick[0].card.suit
 
@@ -187,7 +201,9 @@ function chooseLastToPlay(state: PlayState, seat: Seat, options: Card[], trick: 
     return pool.slice().sort((a, b) => a.rank - b.rank)[0]
   }
 
-  const winning = options.filter((c) => trickWinner([...trick, { seat, card: c }], state.trumpSuit) === seat)
+  const winning = options.filter(
+    (c) => trickWinner([...trick, { seat, card: c }], state.trumpSuit) === seat
+  )
   if (winning.length > 0) {
     return winning.slice().sort((a, b) => a.rank - b.rank)[0]
   }

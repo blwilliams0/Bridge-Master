@@ -36,7 +36,9 @@ export function SettingsPanel({ onClose }: SettingsPanelProps): React.JSX.Elemen
         onClick={(e) => e.stopPropagation()}
         className="w-[440px] rounded-2xl border border-[var(--color-gold)] bg-[var(--color-wood-850)] p-7 shadow-[0_20px_60px_rgba(0,0,0,0.65)]"
       >
-        <h2 className="font-display text-2xl tracking-wide text-[var(--color-gold-bright)]">Settings</h2>
+        <h2 className="font-display text-2xl tracking-wide text-[var(--color-gold-bright)]">
+          Settings
+        </h2>
         <p className="mt-1 font-body text-sm text-[var(--color-cream-muted)]">
           Choose how sharp your opponents (and partner) play.
         </p>
@@ -54,7 +56,9 @@ export function SettingsPanel({ onClose }: SettingsPanelProps): React.JSX.Elemen
               }`}
             >
               <div className="font-display text-base text-[var(--color-cream)]">{opt.label}</div>
-              <div className="mt-0.5 font-body text-sm text-[var(--color-cream-muted)]">{opt.description}</div>
+              <div className="mt-0.5 font-body text-sm text-[var(--color-cream-muted)]">
+                {opt.description}
+              </div>
             </button>
           ))}
         </div>

@@ -66,6 +66,7 @@ interface GameState {
   lastCompletedTrick: { trick: Trick; winner: Seat } | null
 
   startNewGame: () => void
+  resumeGame: () => void
   startNextHand: () => void
   humanBid: (call: Call) => void
   humanPlay: (card: Card) => void
@@ -79,9 +80,30 @@ function dealNewHand(boardNumber: number): { setup: HandSetup; auction: AuctionS
 }
 
 export const useGameStore = create<GameState>((set, get) => {
+  let pendingTimer: ReturnType<typeof setTimeout> | undefined
+
+  function cancelPending(): void {
+    clearTimeout(pendingTimer)
+    pendingTimer = undefined
+  }
+
+  function pause(view: 'home' | 'tutorial'): void {
+    cancelPending()
+    set({ view, handId: get().handId + 1 })
+  }
+
   function advanceAi(expectedHandId: number): void {
     const state = get()
-    if (state.handId !== expectedHandId) return
+    if (state.handId !== expectedHandId || state.view !== 'table') return
+    cancelPending()
+    if (state.lastCompletedTrick) {
+      pendingTimer = setTimeout(() => {
+        if (get().handId !== expectedHandId) return
+        set({ lastCompletedTrick: null })
+        advanceAi(expectedHandId)
+      }, TRICK_LINGER_MS)
+      return
+    }
 
     if (state.phase === 'bidding') {
       const auction = state.auction!
@@ -99,7 +121,7 @@ export const useGameStore = create<GameState>((set, get) => {
       }
       const seat = whoseTurn(auction)
       if (seat === HUMAN_SEAT) return
-      setTimeout(() => {
+      pendingTimer = setTimeout(() => {
         const s = get()
         if (s.handId !== expectedHandId || s.phase !== 'bidding' || !s.auction) return
         // Recompute whose turn it is at fire time (not the seat captured when this
@@ -127,7 +149,7 @@ export const useGameStore = create<GameState>((set, get) => {
       }
       const seat = playState.nextToPlay
       if (controllerOf(contract, seat) === HUMAN_SEAT) return
-      setTimeout(() => {
+      pendingTimer = setTimeout(() => {
         const s = get()
         if (s.handId !== expectedHandId || s.phase !== 'play' || !s.playState || !s.contract) return
         // Recompute whose turn it is at fire time -- a stale captured seat must
@@ -178,12 +200,7 @@ export const useGameStore = create<GameState>((set, get) => {
       const completedTrick = next.tricks[next.tricks.length - 1]
       const winner = next.nextToPlay
       set({ playState: next, lastCompletedTrick: { trick: completedTrick, winner } })
-      setTimeout(() => {
-        const s2 = get()
-        if (s2.handId !== expectedHandId) return
-        set({ lastCompletedTrick: null })
-        advanceAi(expectedHandId)
-      }, TRICK_LINGER_MS)
+      advanceAi(expectedHandId)
     } else {
       set({ playState: next })
       advanceAi(expectedHandId)
@@ -204,6 +221,7 @@ export const useGameStore = create<GameState>((set, get) => {
     lastCompletedTrick: null,
 
     startNewGame: () => {
+      cancelPending()
       const boardNumber = 1
       const { setup, auction } = dealNewHand(boardNumber)
       const handId = get().handId + 1
@@ -223,11 +241,20 @@ export const useGameStore = create<GameState>((set, get) => {
       advanceAi(handId)
     },
 
+    resumeGame: () => {
+      if (!get().setup || get().view === 'table') return
+      set({ view: 'table' })
+      advanceAi(get().handId)
+    },
+
     startNextHand: () => {
+      if (get().phase !== 'scoring' && get().phase !== 'passed-out') return
+      cancelPending()
       const boardNumber = get().boardNumber + 1
       const { setup, auction } = dealNewHand(boardNumber)
       const handId = get().handId + 1
       set({
+        view: 'table',
         boardNumber,
         handId,
         setup,
@@ -243,7 +270,7 @@ export const useGameStore = create<GameState>((set, get) => {
 
     humanBid: (call: Call) => {
       const s = get()
-      if (s.phase !== 'bidding' || !s.auction) return
+      if (s.view !== 'table' || s.phase !== 'bidding' || !s.auction) return
       if (whoseTurn(s.auction) !== HUMAN_SEAT) return
       if (!isCallLegal(s.auction, call)) return
       const auction = makeCall(s.auction, call)
@@ -253,15 +280,22 @@ export const useGameStore = create<GameState>((set, get) => {
 
     humanPlay: (card: Card) => {
       const s = get()
-      if (s.phase !== 'play' || !s.playState || !s.contract) return
+      if (
+        s.view !== 'table' ||
+        s.lastCompletedTrick ||
+        s.phase !== 'play' ||
+        !s.playState ||
+        !s.contract
+      )
+        return
       const seat = s.playState.nextToPlay
       if (controllerOf(s.contract as Contract, seat) !== HUMAN_SEAT) return
       if (!isPlayLegal(s.playState, seat, card)) return
       applyPlay(s.handId, seat, card)
     },
 
-    enterTutorial: () => set({ view: 'tutorial' }),
-    returnHome: () => set({ view: 'home' })
+    enterTutorial: () => pause('tutorial'),
+    returnHome: () => pause('home')
   }
 })
 

@@ -1,7 +1,8 @@
 import { Card as CardModel } from '@renderer/engine/types'
 import { rankLabel } from '@renderer/engine/cards'
 import { CardFrame } from './CardFrame'
-import { SuitGlyph, suitColor } from './SuitGlyph'
+import { SuitGlyph } from './SuitGlyph'
+import { suitColor } from '@renderer/lib/cardDisplay'
 import { pipLayoutFor } from './pipLayout'
 
 interface CardProps {
@@ -15,7 +16,13 @@ interface CardProps {
 
 const COURT_LETTERS: Partial<Record<number, string>> = { 11: 'J', 12: 'Q', 13: 'K' }
 
-export function Card({ card, className, style, interactive = 'static', onClick }: CardProps): React.JSX.Element {
+export function Card({
+  card,
+  className,
+  style,
+  interactive = 'static',
+  onClick
+}: CardProps): React.JSX.Element {
   const color = suitColor(card.suit)
   const label = rankLabel(card.rank)
   const courtLetter = COURT_LETTERS[card.rank]
@@ -37,7 +44,8 @@ export function Card({ card, className, style, interactive = 'static', onClick }
             : 'border-[var(--color-gold-dim)] shadow-[0_3px_8px_rgba(0,0,0,0.4)]'
       } ${className ?? ''}`}
       style={{
-        background: 'linear-gradient(160deg, var(--color-parchment-light), var(--color-parchment) 65%, var(--color-parchment-950))',
+        background:
+          'linear-gradient(160deg, var(--color-parchment-light), var(--color-parchment) 65%, var(--color-parchment-950))',
         ...style
       }}
     >
@@ -108,8 +116,24 @@ function CourtMedallion({
 }): React.JSX.Element {
   return (
     <svg viewBox="0 0 100 100" className="h-full w-full">
-      <circle cx="50" cy="50" r="34" fill="none" stroke="var(--color-gold)" strokeWidth="2" opacity={0.85} />
-      <circle cx="50" cy="50" r="29" fill="none" stroke="var(--color-gold)" strokeWidth="0.7" opacity={0.55} />
+      <circle
+        cx="50"
+        cy="50"
+        r="34"
+        fill="none"
+        stroke="var(--color-gold)"
+        strokeWidth="2"
+        opacity={0.85}
+      />
+      <circle
+        cx="50"
+        cy="50"
+        r="29"
+        fill="none"
+        stroke="var(--color-gold)"
+        strokeWidth="0.7"
+        opacity={0.55}
+      />
       {[0, 90, 180, 270].map((angle) => (
         <g key={angle} transform={`rotate(${angle} 50 50)`}>
           <circle cx="50" cy="16" r="1.6" fill="var(--color-gold-bright)" />

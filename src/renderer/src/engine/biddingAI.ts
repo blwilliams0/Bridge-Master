@@ -1,5 +1,16 @@
 import { bidValue, highestBid, isCallLegal, whoseTurn } from './bidding'
-import { AnnotatedCall, AuctionState, BidCall, Call, ForcingLevel, Hand, partnerOf, Seat, Suit, SUITS } from './types'
+import {
+  AnnotatedCall,
+  AuctionState,
+  BidCall,
+  Call,
+  ForcingLevel,
+  Hand,
+  partnerOf,
+  Seat,
+  Suit,
+  SUITS
+} from './types'
 
 export interface HandEvaluation {
   hcp: number
@@ -117,7 +128,11 @@ function minLegalLevelFor(auction: AuctionState, strain: Suit | 'NT'): Level | n
 function agreedSuit(auction: AuctionState, seat: Seat): Suit | null {
   const partner = partnerOf(seat)
   for (const c of auction.calls) {
-    if ((c.seat === seat || c.seat === partner) && c.call.type === 'bid' && c.call.strain !== 'NT') {
+    if (
+      (c.seat === seat || c.seat === partner) &&
+      c.call.type === 'bid' &&
+      c.call.strain !== 'NT'
+    ) {
       return c.call.strain as Suit
     }
   }
@@ -126,7 +141,8 @@ function agreedSuit(auction: AuctionState, seat: Seat): Suit | null {
 
 function firstSuitBidBy(auction: AuctionState, seat: Seat): Suit | null {
   for (const c of auction.calls) {
-    if (c.seat === seat && c.call.type === 'bid' && c.call.strain !== 'NT') return c.call.strain as Suit
+    if (c.seat === seat && c.call.type === 'bid' && c.call.strain !== 'NT')
+      return c.call.strain as Suit
   }
   return null
 }
@@ -144,7 +160,11 @@ function tryCall(
   return { seat, call, meaning, forcing }
 }
 
-function tryDouble(auction: AuctionState, meaning: string, forcing: ForcingLevel): AnnotatedCall | null {
+function tryDouble(
+  auction: AuctionState,
+  meaning: string,
+  forcing: ForcingLevel
+): AnnotatedCall | null {
   const seat = whoseTurn(auction)
   const call: Call = { type: 'double' }
   if (!isCallLegal(auction, call)) return null
@@ -157,7 +177,7 @@ function passCall(auction: AuctionState): AnnotatedCall {
 
 // ---- Opening ----
 
-function decideOpening(auction: AuctionState, hand: Hand, _seat: Seat): AnnotatedCall {
+function decideOpening(auction: AuctionState, hand: Hand): AnnotatedCall {
   const { hcp } = evaluateHand(hand)
   const lengths = suitLengths(hand)
   const balanced = isBalanced(lengths)
@@ -190,7 +210,12 @@ function decideOpening(auction: AuctionState, hand: Hand, _seat: Seat): Annotate
 
 // ---- Competitive: opponent opened, we haven't acted ----
 
-function decideOvercallOrDouble(auction: AuctionState, hand: Hand, _seat: Seat, top: AnnotatedCall): AnnotatedCall {
+function decideOvercallOrDouble(
+  auction: AuctionState,
+  hand: Hand,
+  _seat: Seat,
+  top: AnnotatedCall
+): AnnotatedCall {
   const openBid = top.call as BidCall
   const { hcp } = evaluateHand(hand)
   const lengths = suitLengths(hand)
@@ -215,7 +240,13 @@ function decideOvercallOrDouble(auction: AuctionState, hand: Hand, _seat: Seat, 
         if (c) return c
       }
     }
-    if (isBalanced(lengths) && hcp >= 15 && hcp <= 18 && openedSuit && hasStopper(hand, openedSuit)) {
+    if (
+      isBalanced(lengths) &&
+      hcp >= 15 &&
+      hcp <= 18 &&
+      openedSuit &&
+      hasStopper(hand, openedSuit)
+    ) {
       const c = tryCall(auction, 1, 'NT', '1nt-overcall', 'invitational')
       if (c) return c
     }
@@ -234,7 +265,13 @@ function respondToPartnersDouble(auction: AuctionState, hand: Hand): AnnotatedCa
   const candidates = order.filter((s) => s !== doubledSuit).sort((a, b) => lengths[b] - lengths[a])
   const bestSuit = candidates[0]
 
-  if (hcp >= 10 && isBalanced(lengths) && doubledSuit && doubledSuit !== 'NT' && hasStopper(hand, doubledSuit as Suit)) {
+  if (
+    hcp >= 10 &&
+    isBalanced(lengths) &&
+    doubledSuit &&
+    doubledSuit !== 'NT' &&
+    hasStopper(hand, doubledSuit as Suit)
+  ) {
     const level = minLegalLevelFor(auction, 'NT')
     if (level) {
       const c = tryCall(auction, level, 'NT', 'double-response-nt', 'none')
@@ -245,7 +282,9 @@ function respondToPartnersDouble(auction: AuctionState, hand: Hand): AnnotatedCa
   const level = minLegalLevelFor(auction, bestSuit)
   if (level && level <= 4) {
     const finalLevel = hcp >= 10 ? level + 1 : level
-    const c = tryCall(auction, finalLevel, bestSuit, 'double-response', 'none') ?? tryCall(auction, level, bestSuit, 'double-response', 'none')
+    const c =
+      tryCall(auction, finalLevel, bestSuit, 'double-response', 'none') ??
+      tryCall(auction, level, bestSuit, 'double-response', 'none')
     if (c) return c
   }
 
@@ -268,7 +307,11 @@ function respondToStrong2C(auction: AuctionState, hand: Hand): AnnotatedCall {
   return tryCall(auction, 2, 'D', 'waiting-response', 'game') ?? passCall(auction)
 }
 
-function respondTo1NT(auction: AuctionState, hcp: number, lengths: Record<Suit, number>): AnnotatedCall {
+function respondTo1NT(
+  auction: AuctionState,
+  hcp: number,
+  lengths: Record<Suit, number>
+): AnnotatedCall {
   const hasMajor4 = lengths.S >= 4 || lengths.H >= 4
   const has5CardMajor = lengths.S >= 5 || lengths.H >= 5
 
@@ -288,19 +331,40 @@ function respondTo1NT(auction: AuctionState, hcp: number, lengths: Record<Suit, 
     return tryCall(auction, 3, 'NT', 'game', 'none') ?? passCall(auction)
   }
   if (hcp <= 16) {
-    return tryCall(auction, 4, 'NT', 'quantitative-invite', 'invitational') ?? tryCall(auction, 3, 'NT', 'game', 'none') ?? passCall(auction)
+    return (
+      tryCall(auction, 4, 'NT', 'quantitative-invite', 'invitational') ??
+      tryCall(auction, 3, 'NT', 'game', 'none') ??
+      passCall(auction)
+    )
   }
-  return tryCall(auction, 6, 'NT', 'slam', 'none') ?? tryCall(auction, 3, 'NT', 'game', 'none') ?? passCall(auction)
+  return (
+    tryCall(auction, 6, 'NT', 'slam', 'none') ??
+    tryCall(auction, 3, 'NT', 'game', 'none') ??
+    passCall(auction)
+  )
 }
 
-function respondTo2NT(auction: AuctionState, hcp: number, lengths: Record<Suit, number>): AnnotatedCall {
+function respondTo2NT(
+  auction: AuctionState,
+  hcp: number,
+  lengths: Record<Suit, number>
+): AnnotatedCall {
   const hasMajor4 = lengths.S >= 4 || lengths.H >= 4
   if (hcp <= 3) return passCall(auction)
   if (hcp <= 8) {
-    if (hasMajor4) return tryCall(auction, 3, 'C', 'stayman', 'game') ?? tryCall(auction, 3, 'NT', 'game', 'none') ?? passCall(auction)
+    if (hasMajor4)
+      return (
+        tryCall(auction, 3, 'C', 'stayman', 'game') ??
+        tryCall(auction, 3, 'NT', 'game', 'none') ??
+        passCall(auction)
+      )
     return tryCall(auction, 3, 'NT', 'game', 'none') ?? passCall(auction)
   }
-  return tryCall(auction, 6, 'NT', 'slam', 'none') ?? tryCall(auction, 3, 'NT', 'game', 'none') ?? passCall(auction)
+  return (
+    tryCall(auction, 6, 'NT', 'slam', 'none') ??
+    tryCall(auction, 3, 'NT', 'game', 'none') ??
+    passCall(auction)
+  )
 }
 
 function respondToSuitOpening(
@@ -318,7 +382,8 @@ function respondToSuitOpening(
 
   if (isMajor && support >= 3) {
     if (totalPts >= 13) return tryCall(auction, 4, suit, 'game-raise', 'none') ?? passCall(auction)
-    if (totalPts >= 10) return tryCall(auction, 3, suit, 'limit-raise', 'invitational') ?? passCall(auction)
+    if (totalPts >= 10)
+      return tryCall(auction, 3, suit, 'limit-raise', 'invitational') ?? passCall(auction)
     return tryCall(auction, 2, suit, 'simple-raise', 'none') ?? passCall(auction)
   }
 
@@ -347,17 +412,31 @@ function respondToSuitOpening(
   )
 }
 
-function respondToPreempt(auction: AuctionState, partnerBid: BidCall, hcp: number, lengths: Record<Suit, number>): AnnotatedCall {
+function respondToPreempt(
+  auction: AuctionState,
+  partnerBid: BidCall,
+  hcp: number,
+  lengths: Record<Suit, number>
+): AnnotatedCall {
   const fit = partnerBid.strain !== 'NT' ? lengths[partnerBid.strain as Suit] : 0
   if (hcp >= 16 || (fit >= 3 && hcp >= 10)) {
-    const gameLevel = partnerBid.strain === 'S' || partnerBid.strain === 'H' ? 4 : partnerBid.strain === 'NT' ? 3 : 5
+    const gameLevel =
+      partnerBid.strain === 'S' || partnerBid.strain === 'H'
+        ? 4
+        : partnerBid.strain === 'NT'
+          ? 3
+          : 5
     const level = Math.max(gameLevel, partnerBid.level + 1)
     return tryCall(auction, level, partnerBid.strain, 'preempt-raise', 'none') ?? passCall(auction)
   }
   return passCall(auction)
 }
 
-function decideResponse(auction: AuctionState, hand: Hand, partnerActive: AnnotatedCall[]): AnnotatedCall {
+function decideResponse(
+  auction: AuctionState,
+  hand: Hand,
+  partnerActive: AnnotatedCall[]
+): AnnotatedCall {
   const partnerLast = partnerActive[partnerActive.length - 1]
   const { hcp, distributionPoints } = evaluateHand(hand)
   const lengths = suitLengths(hand)
@@ -369,10 +448,18 @@ function decideResponse(auction: AuctionState, hand: Hand, partnerActive: Annota
   if (partnerLast.call.type !== 'bid') return passCall(auction)
   const partnerBid = partnerLast.call as BidCall
 
-  if (partnerBid.strain === 'NT' && partnerBid.level === 1) return respondTo1NT(auction, hcp, lengths)
-  if (partnerBid.strain === 'NT' && partnerBid.level === 2) return respondTo2NT(auction, hcp, lengths)
+  if (partnerBid.strain === 'NT' && partnerBid.level === 1)
+    return respondTo1NT(auction, hcp, lengths)
+  if (partnerBid.strain === 'NT' && partnerBid.level === 2)
+    return respondTo2NT(auction, hcp, lengths)
   if (partnerBid.strain !== 'NT' && partnerBid.level === 1) {
-    return respondToSuitOpening(auction, partnerBid.strain as Suit, hcp, distributionPoints, lengths)
+    return respondToSuitOpening(
+      auction,
+      partnerBid.strain as Suit,
+      hcp,
+      distributionPoints,
+      lengths
+    )
   }
   if (partnerLast.meaning === 'weak-two' || partnerLast.meaning === 'preempt') {
     return respondToPreempt(auction, partnerBid, hcp, lengths)
@@ -388,9 +475,15 @@ function replyToBlackwood(auction: AuctionState, hand: Hand): AnnotatedCall {
   return tryCall(auction, 5, strain, 'blackwood-reply', 'none') ?? passCall(auction)
 }
 
-function replyToStayman(auction: AuctionState, lengths: Record<Suit, number>, askLevel: number): AnnotatedCall {
-  if (lengths.H >= 4) return tryCall(auction, askLevel, 'H', 'stayman-reply', 'none') ?? passCall(auction)
-  if (lengths.S >= 4) return tryCall(auction, askLevel, 'S', 'stayman-reply', 'none') ?? passCall(auction)
+function replyToStayman(
+  auction: AuctionState,
+  lengths: Record<Suit, number>,
+  askLevel: number
+): AnnotatedCall {
+  if (lengths.H >= 4)
+    return tryCall(auction, askLevel, 'H', 'stayman-reply', 'none') ?? passCall(auction)
+  if (lengths.S >= 4)
+    return tryCall(auction, askLevel, 'S', 'stayman-reply', 'none') ?? passCall(auction)
   return tryCall(auction, askLevel, 'D', 'stayman-reply-no-major', 'none') ?? passCall(auction)
 }
 
@@ -405,7 +498,11 @@ function interpretBlackwoodReply(
   const partnerAces = replyBid.strain !== 'NT' ? ACE_COUNT_FROM_STRAIN[replyBid.strain as Suit] : 0
   const totalAces = countAces(hand) + partnerAces
   if (totalAces >= 4 && hcp >= 22) {
-    return tryCall(auction, 7, suit, 'grand-slam', 'none') ?? tryCall(auction, 6, suit, 'small-slam', 'none') ?? passCall(auction)
+    return (
+      tryCall(auction, 7, suit, 'grand-slam', 'none') ??
+      tryCall(auction, 6, suit, 'small-slam', 'none') ??
+      passCall(auction)
+    )
   }
   if (totalAces >= 3) {
     return tryCall(auction, 6, suit, 'small-slam', 'none') ?? passCall(auction)
@@ -420,7 +517,8 @@ function interpretStaymanReply(
   lengths: Record<Suit, number>
 ): AnnotatedCall {
   if (replyBid.strain === 'D' || replyBid.strain === 'C') {
-    if (hcp >= 10) return tryCall(auction, 3, 'NT', 'game-after-stayman', 'none') ?? passCall(auction)
+    if (hcp >= 10)
+      return tryCall(auction, 3, 'NT', 'game-after-stayman', 'none') ?? passCall(auction)
     return tryCall(auction, 2, 'NT', 'invite-after-stayman', 'invitational') ?? passCall(auction)
   }
   const haveFit = lengths[replyBid.strain as Suit] >= 4
@@ -447,19 +545,26 @@ function openerRebid(
     const combinedEstimate = myPoints + partnerEstimate
 
     if (combinedEstimate >= 33 && hcp >= 18) {
-      return tryCall(auction, 4, 'NT', 'blackwood-ask', 'none') ?? tryCall(auction, 4, openedSuit, 'game-raise', 'none') ?? passCall(auction)
+      return (
+        tryCall(auction, 4, 'NT', 'blackwood-ask', 'none') ??
+        tryCall(auction, 4, openedSuit, 'game-raise', 'none') ??
+        passCall(auction)
+      )
     }
     if (hcp >= 19 || combinedEstimate >= 26) {
       return tryCall(auction, 4, openedSuit, 'game-raise', 'none') ?? passCall(auction)
     }
     if (hcp >= 16) {
-      return tryCall(auction, 3, openedSuit, 'invitational-raise', 'invitational') ?? passCall(auction)
+      return (
+        tryCall(auction, 3, openedSuit, 'invitational-raise', 'invitational') ?? passCall(auction)
+      )
     }
     return passCall(auction)
   }
 
   if (hcp >= 19) return tryCall(auction, 3, 'NT', 'strong-rebid-nt', 'none') ?? passCall(auction)
-  if (hcp >= 16) return tryCall(auction, 2, 'NT', 'invitational-rebid', 'invitational') ?? passCall(auction)
+  if (hcp >= 16)
+    return tryCall(auction, 2, 'NT', 'invitational-rebid', 'invitational') ?? passCall(auction)
   if (lengths[openedSuit] >= 6) {
     const minLevel = Math.max(2, resp.level)
     return tryCall(auction, minLevel, openedSuit, 'minimum-rebid', 'none') ?? passCall(auction)
@@ -535,7 +640,7 @@ function decideBid(auction: AuctionState, hand: Hand, seat: Seat): AnnotatedCall
       return decideResponse(auction, hand, partnerActive)
     }
     if (!top) {
-      return decideOpening(auction, hand, seat)
+      return decideOpening(auction, hand)
     }
     return decideOvercallOrDouble(auction, hand, seat, top)
   }

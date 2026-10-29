@@ -1,5 +1,5 @@
 import { AnnotatedCall, AuctionState, SEATS } from '@renderer/engine/types'
-import { strainColor, strainSymbol } from './BiddingBox'
+import { strainColor, strainSymbol } from '@renderer/lib/cardDisplay'
 
 interface AuctionHistoryProps {
   auction: AuctionState
@@ -34,7 +34,10 @@ export function AuctionHistory({ auction }: AuctionHistoryProps): React.JSX.Elem
         {rows.map((r, i) => (
           <div key={i} className="grid grid-cols-4 gap-1 text-center text-sm">
             {r.map((call, j) => (
-              <div key={j} className="rounded bg-[var(--color-wood-800)]/60 py-1 text-[var(--color-cream)]">
+              <div
+                key={j}
+                className="rounded bg-[var(--color-wood-800)]/60 py-1 text-[var(--color-cream)]"
+              >
                 {call ? <CallLabel call={call} /> : ''}
               </div>
             ))}
@@ -47,8 +50,10 @@ export function AuctionHistory({ auction }: AuctionHistoryProps): React.JSX.Elem
 
 function CallLabel({ call }: { call: AnnotatedCall }): React.JSX.Element {
   if (call.call.type === 'pass') return <span className="text-[var(--color-cream-dim)]">Pass</span>
-  if (call.call.type === 'double') return <span className="text-[var(--color-crimson-bright)]">X</span>
-  if (call.call.type === 'redouble') return <span className="text-[var(--color-crimson-bright)]">XX</span>
+  if (call.call.type === 'double')
+    return <span className="text-[var(--color-crimson-bright)]">X</span>
+  if (call.call.type === 'redouble')
+    return <span className="text-[var(--color-crimson-bright)]">XX</span>
   const { level, strain } = call.call
   return (
     <span style={{ color: strainColor(strain) }}>

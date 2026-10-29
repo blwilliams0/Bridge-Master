@@ -2,10 +2,10 @@ export default function DefenseBasics(): React.JSX.Element {
   return (
     <div className="flex flex-col gap-6 font-body text-[var(--color-cream)]">
       <p>
-        When you're defending (not declarer or dummy), you and your partner see only your own 13
-        cards -- so a handful of table conventions help you cooperate without being able to show
-        each other your hands. Bridge Master's own "Club Player" AI follows exactly these rules
-        when it defends:
+        When you&apos;re defending (not declarer or dummy), you and your partner see only your own
+        13 cards -- so a handful of table conventions help you cooperate without being able to show
+        each other your hands. Bridge Master&apos;s own &quot;Club Player&quot; AI follows exactly
+        these rules when it defends:
       </p>
 
       <div className="flex flex-col gap-3">

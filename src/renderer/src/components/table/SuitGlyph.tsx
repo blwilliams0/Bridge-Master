@@ -1,8 +1,6 @@
 import { Suit } from '@renderer/engine/types'
 
-export function suitColor(suit: Suit): string {
-  return suit === 'H' || suit === 'D' ? 'var(--color-crimson)' : 'var(--color-ink)'
-}
+import { suitColor } from '@renderer/lib/cardDisplay'
 
 interface SuitGlyphProps {
   suit: Suit
@@ -17,7 +15,12 @@ interface SuitGlyphProps {
  * small decorative flourish, rendered at a fixed 0-100 viewBox so they can
  * be dropped at any size across corner indices, pips, and the card back.
  */
-export function SuitGlyph({ suit, size = 20, className, color: colorOverride }: SuitGlyphProps): React.JSX.Element {
+export function SuitGlyph({
+  suit,
+  size = 20,
+  className,
+  color: colorOverride
+}: SuitGlyphProps): React.JSX.Element {
   const color = colorOverride ?? suitColor(suit)
   return (
     <svg

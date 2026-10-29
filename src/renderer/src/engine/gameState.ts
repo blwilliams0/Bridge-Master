@@ -100,8 +100,7 @@ export function playOutHand(
 
   const playState = runPlay(contract, setup, chooseCard)
   const declarerPartnership = partnershipOf(contract.declarer)
-  const tricksTaken =
-    declarerPartnership === 'NS' ? playState.tricksWonNS : playState.tricksWonEW
+  const tricksTaken = declarerPartnership === 'NS' ? playState.tricksWonNS : playState.tricksWonEW
   const score = scoreHand(contract, tricksTaken, setup.vulnerability)
 
   return { setup, auction, contract, playState, score }

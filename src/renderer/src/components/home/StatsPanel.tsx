@@ -20,8 +20,12 @@ export function StatsPanel({ onClose }: StatsPanelProps): React.JSX.Element {
         onClick={(e) => e.stopPropagation()}
         className="w-[440px] rounded-2xl border border-[var(--color-gold)] bg-[var(--color-wood-850)] p-7 shadow-[0_20px_60px_rgba(0,0,0,0.65)]"
       >
-        <h2 className="font-display text-2xl tracking-wide text-[var(--color-gold-bright)]">Your Record</h2>
-        <p className="mt-1 font-body text-sm text-[var(--color-cream-muted)]">Across every hand you've played.</p>
+        <h2 className="font-display text-2xl tracking-wide text-[var(--color-gold-bright)]">
+          Your Record
+        </h2>
+        <p className="mt-1 font-body text-sm text-[var(--color-cream-muted)]">
+          Across every hand you&apos;ve played.
+        </p>
 
         <dl className="mt-5 grid grid-cols-2 gap-x-6 gap-y-5">
           <Stat label="Hands played" value={stats.handsPlayed} />
@@ -53,11 +57,21 @@ export function StatsPanel({ onClose }: StatsPanelProps): React.JSX.Element {
   )
 }
 
-function Stat({ label, value, signed }: { label: string; value: number; signed?: boolean }): React.JSX.Element {
+function Stat({
+  label,
+  value,
+  signed
+}: {
+  label: string
+  value: number
+  signed?: boolean
+}): React.JSX.Element {
   const display = signed && value > 0 ? `+${value}` : String(value)
   return (
     <div>
-      <dt className="font-display text-xs uppercase tracking-wide text-[var(--color-cream-dim)]">{label}</dt>
+      <dt className="font-display text-xs uppercase tracking-wide text-[var(--color-cream-dim)]">
+        {label}
+      </dt>
       <dd className="font-display text-2xl text-[var(--color-amber-glow)]">{display}</dd>
     </div>
   )

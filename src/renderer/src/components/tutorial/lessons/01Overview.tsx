@@ -23,19 +23,25 @@ export default function Overview(): React.JSX.Element {
       <p>
         All 52 cards are dealt out, 13 to each player. On every trick, all four players play one
         card in turn; whoever plays the highest card of the suit led (or the highest trump, if one
-        is played) wins the trick and leads the next one. Your side's goal is to win at least as
-        many tricks as your partnership committed to during the auction.
+        is played) wins the trick and leads the next one. Your side&apos;s goal is to win at least
+        as many tricks as your partnership committed to during the auction.
       </p>
       <p>
-        Every hand has two phases: first the <strong>auction</strong>, where the four players bid
-        to set the contract, then <strong>play</strong>, where all 13 tricks are fought over. The
-        next few lessons walk through both.
+        Every hand has two phases: first the <strong>auction</strong>, where the four players bid to
+        set the contract, then <strong>play</strong>, where all 13 tricks are fought over. The next
+        few lessons walk through both.
       </p>
     </div>
   )
 }
 
-function SeatBadge({ label, partnership }: { label: string; partnership: 'NS' | 'EW' }): React.JSX.Element {
+function SeatBadge({
+  label,
+  partnership
+}: {
+  label: string
+  partnership: 'NS' | 'EW'
+}): React.JSX.Element {
   const color = partnership === 'NS' ? 'var(--color-amber-glow)' : 'var(--color-crimson-bright)'
   return (
     <div className="flex flex-col items-center gap-1">

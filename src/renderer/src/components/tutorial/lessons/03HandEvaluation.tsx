@@ -28,15 +28,15 @@ export default function HandEvaluation(): React.JSX.Element {
   return (
     <div className="flex flex-col gap-6 font-body text-[var(--color-cream)]">
       <p>
-        Before bidding, every player counts their hand's strength. The most common method is{' '}
+        Before bidding, every player counts their hand&apos;s strength. The most common method is{' '}
         <strong className="text-[var(--color-gold-bright)]">high card points (HCP)</strong>: Ace =
-        4, King = 3, Queen = 2, Jack = 1. A full deck holds 40 points; an average 13-card hand
-        holds about 10.
+        4, King = 3, Queen = 2, Jack = 1. A full deck holds 40 points; an average 13-card hand holds
+        about 10.
       </p>
       <p>
-        Shape matters too: a <strong>void</strong> (no cards of a suit) adds 3 distribution
-        points, a <strong>singleton</strong> adds 2, and a <strong>doubleton</strong> adds 1 --
-        shortness makes a hand more useful once a trump suit is agreed.
+        Shape matters too: a <strong>void</strong> (no cards of a suit) adds 3 distribution points,
+        a <strong>singleton</strong> adds 2, and a <strong>doubleton</strong> adds 1 -- shortness
+        makes a hand more useful once a trump suit is agreed.
       </p>
 
       <div className="rounded-xl border border-[var(--color-gold-dim)] bg-[var(--color-wood-900)] p-4">
@@ -70,7 +70,13 @@ export default function HandEvaluation(): React.JSX.Element {
       </div>
 
       {result && (
-        <p className={result === 'correct' ? 'text-[var(--color-gold-bright)]' : 'text-[var(--color-crimson-bright)]'}>
+        <p
+          className={
+            result === 'correct'
+              ? 'text-[var(--color-gold-bright)]'
+              : 'text-[var(--color-crimson-bright)]'
+          }
+        >
           {result === 'correct'
             ? 'Correct!'
             : `Not quite -- this hand is ${evaluation.hcp} HCP (plus ${evaluation.distributionPoints} distribution point${

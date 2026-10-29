@@ -54,7 +54,11 @@
 }
 
 body {
-  background: radial-gradient(ellipse at center, var(--color-wood-900) 0%, var(--color-wood-950) 70%);
+  background: radial-gradient(
+    ellipse at center,
+    var(--color-wood-900) 0%,
+    var(--color-wood-950) 70%
+  );
   overflow: hidden;
   user-select: none;
 }

@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest'
-import { createAuction, isAuctionOver, isCallLegal, makeCall, resolveAuction, whoseTurn } from '../bidding'
+import {
+  createAuction,
+  isAuctionOver,
+  isCallLegal,
+  makeCall,
+  resolveAuction,
+  whoseTurn
+} from '../bidding'
 import { chooseBid } from '../biddingAI'
 import { seededRng } from '../cards'
 import { createHandSetup } from '../gameState'
@@ -27,7 +34,10 @@ describe('fuzz: real bidding/play AI never crashes, stalls, or acts illegally', 
         const seat = whoseTurn(auction)
         const annotated = chooseBid(auction, setup.deal[seat], seat)
         expect(isCallLegal(auction, annotated.call)).toBe(true)
-        auction = makeCall(auction, annotated.call, { meaning: annotated.meaning, forcing: annotated.forcing })
+        auction = makeCall(auction, annotated.call, {
+          meaning: annotated.meaning,
+          forcing: annotated.forcing
+        })
       }
 
       const contract = resolveAuction(auction)
